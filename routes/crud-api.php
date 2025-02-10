@@ -8,8 +8,8 @@ use App\Http\Controllers\UploadController;
 Route::middleware('auth:api')->group(function () {
     Route::controller(EventController::class)->group(function () {
         Route::get('/events', 'readAll');
-        Route::post('/events', 'createOne');
-
+        Route::post('/events/create', 'createOne');
+    
     });
     Route::controller(UploadController::class)->group(
         function () {
@@ -22,6 +22,8 @@ Route::middleware('auth:api')->group(function () {
         }
     );
 });
+
+
 
 
 // Route::controller(EventController::class)->group(
