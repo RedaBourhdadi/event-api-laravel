@@ -33,6 +33,10 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         'email',
         'password',
     ];
+    public function event ()
+    {
+        return $this->hasMany(Event::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -71,6 +75,9 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
                 $user->givePermission('users.'.$user->id.'.read');
                 $user->givePermission('users.'.$user->id.'.update');
                 $user->givePermission('users.'.$user->id.'.delete');
+                $user->givePermission('events.'.$user->id.'.read');
+                $user->givePermission('events.'.$user->id.'.create');
+                
             }
         );
         static::deleted(
