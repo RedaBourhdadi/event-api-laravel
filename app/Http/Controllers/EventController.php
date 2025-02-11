@@ -24,19 +24,19 @@ class EventController extends CrudController
 
 
 
-    public function createOne(Request $request)
-    {
-        try {
-            // $request->merge(['password' => Hash::make($request->password)]);
+    // public function createOne(Request $request)
+    // {
+    //     try {
+    //         // $request->merge(['password' => Hash::make($request->password)]);
 
-            return parent::createOne($request);
-        } catch (\Exception $e) {
-            Log::error('Error caught in function UserController.createOne : '.$e->getMessage());
-            Log::error($e->getTraceAsString());
+    //         return parent::createOne($request);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error caught in function UserController.createOne : '.$e->getMessage());
+    //         Log::error($e->getTraceAsString());
 
-            return response()->json(['success' => false, 'errors' => [__('common.unexpected_error')]]);
-        }
-    }
+    //         return response()->json(['success' => false, 'errors' => [__('common.unexpected_error')]]);
+    //     }
+    // }
 
     public function readAll(Request $request)
     {

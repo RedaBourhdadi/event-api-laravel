@@ -30,11 +30,13 @@ class PermissionSeeder extends Seeder
         // Create scoped permissions
         $this->aclService->createScopePermissions('users', ['create', 'read', 'update', 'delete']);
         $this->aclService->createScopePermissions('events', ['create', 'read', 'update', 'delete']);
-
+        $this->aclService->createScopePermissions('event_attendees', ['create', 'read', 'update', 'delete']);
         // Assign permissions to roles
         $this->aclService->assignScopePermissionsToRole($adminRole, 'users', ['create', 'read', 'update', 'delete']);
         $this->aclService->assignScopePermissionsToRole($userRole, 'events', ['create', 'read']);
         $this->aclService->assignScopePermissionsToRole($adminRole, 'events', ['create', 'read', 'update', 'delete']);
+        $this->aclService->assignScopePermissionsToRole($userRole, 'event_attendees', ['create', 'read','delete']);
+        $this->aclService->assignScopePermissionsToRole($adminRole, 'event_attendees', ['create', 'read', 'update', 'delete']);
     }
 
     public function rollback()
