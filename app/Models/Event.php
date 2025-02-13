@@ -19,7 +19,7 @@ class Event extends BaseModel
 
     public function attendees()
     {
-        return $this->belongsToMany(User::class, 'event_attendees', 'user_id','event_id');
+        return $this->hasMany(EventAttendee::class, 'event_id');
     }
 
     public function user()

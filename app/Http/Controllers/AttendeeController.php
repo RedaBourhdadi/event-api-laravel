@@ -8,10 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Arr;
 use DB;
-
-
-
-
+use Illuminate\Support\Facades\Mail;
 
 class AttendeeController extends CrudController
 {
@@ -34,6 +31,8 @@ class AttendeeController extends CrudController
                     if (in_array('create', $this->restricted)) {
                         $user = $request->user();
                         if (! $user->hasPermission($this->getTable(), 'create')) {
+
+                           
                             return response()->json(
                                 [
                                     'success' => false,
@@ -54,6 +53,19 @@ class AttendeeController extends CrudController
 
                             if (method_exists($this, 'afterCreateOne')) {
                                 $this->afterCreateOne($model, $request);
+                            }
+                            try {
+                                Mail::send('vendor.mail.html.registration-confirmed', [
+                                    'userName' => $request->user()->name,
+                                    'eventTitle' => $model->event->title,
+                                    'eventDate' => $model->event->date,
+                                    'eventLocation' => $model->event->location,
+                                ], function ($message) use ($request) {
+                                    $message->to($request->user()->email)
+                                           ->subject('Event Registration Confirmed');
+                                });
+                            } catch (\Exception $e) {
+                                Log::error('Failed to send registration email: ' . $e->getMessage());
                             }
         
                             return response()->json(

@@ -9,6 +9,7 @@ use App\Http\Controllers\AttendeeController;
 Route::middleware('auth:api')->group(function () {
     Route::controller(EventController::class)->group(function () {
         Route::post('/events/create', 'createOne');
+        Route::delete('/events/{id}', 'deleteOne');
     
     });
 
@@ -24,6 +25,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::controller(EventController::class)->group(function () {
+    Route::get('/', 'readAllEvents');
     Route::get('/events', 'readAll');
 
 });

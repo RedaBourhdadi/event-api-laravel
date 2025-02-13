@@ -81,7 +81,9 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
                 $user->givePermission('users.'.$user->id.'.update');
                 $user->givePermission('users.'.$user->id.'.delete');
                 $user->givePermission('events.'.$user->id.'.read');
-                $user->givePermission('events.'.$user->id.'.create');
+                $user->givePermission('events.'.$user->id.'.update');
+                $user->givePermission('events.'.$user->id.'.delete');
+                // $user->givePermission('events.'.$user->id.'.create');
                 $user->givePermission('event_attendees.create');
                 $user->givePermission('event_attendees.'.$user->id.'.delete');
                 $user->givePermission('event_attendees.'.$user->id.'.read');
