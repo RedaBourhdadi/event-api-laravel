@@ -37,10 +37,14 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     {
         return $this->hasMany(Event::class);
     }
-    public function events()
+    public function eventAttendees()
     {
-    return $this->belongsToMany(EventAttendee::class ,'user_id','event_id');
+        return $this->hasMany(EventAttendee::class, 'user_id');
+    }
 
+    public function attendedEvents()
+    {
+        return $this->belongsToMany(Event::class, 'event_attendees', 'user_id', 'event_id');
     }
 
     /**

@@ -4,6 +4,7 @@ use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\AttendeeController;
+use App\Http\Controllers\NotificationController;
 
 
 Route::middleware('auth:api')->group(function () {
@@ -21,6 +22,17 @@ Route::middleware('auth:api')->group(function () {
             Route::delete('/Attendee/{id}', 'deleteOne');
         }
     );
+
+    Route::get('notifications/count', [NotificationController::class, 'getUnreadCount']);
+    Route::post('notifications/mark-all-read', [NotificationController::class, 'markAllAsRead']);
+    Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    
+    Route::controller(NotificationController::class)->group(function () {
+        Route::get('notifications', 'readAll');
+        Route::get('notifications/{id}', 'readOne');
+        Route::post('notifications', 'createOne');
+        Route::delete('notifications/{id}', 'deleteOne');
+    });
 
 });
 

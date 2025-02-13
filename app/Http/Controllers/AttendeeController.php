@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\EventAttendee;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -45,7 +46,7 @@ class AttendeeController extends CrudController
                     $customValidationMsgs = method_exists($model, 'validationMessages') ? $model->validationMessages() : [];
                     $validated = $request->validate(app($this->getModelClass())->rules(), $customValidationMsgs);
                     $cont = DB::table('event_attendees')->where('user_id',$request->user()->id)->where('event_id',$request->event_id)->count();
-
+                    $name = explode('@', $request->user()->email)[0];
 
                     
                     if ($cont<1){
@@ -56,7 +57,7 @@ class AttendeeController extends CrudController
                             }
                             try {
                                 Mail::send('vendor.mail.html.registration-confirmed', [
-                                    'userName' => $request->user()->name,
+                                    'userName' => $name,
                                     'eventTitle' => $model->event->title,
                                     'eventDate' => $model->event->date,
                                     'eventLocation' => $model->event->location,
@@ -64,6 +65,15 @@ class AttendeeController extends CrudController
                                     $message->to($request->user()->email)
                                            ->subject('Event Registration Confirmed');
                                 });
+
+                                Notification::create([
+                                    'user_id' => $request->user()->id,
+                                    'title' => 'New Event Participant',
+                                    'message' => $name . ' has joined your event: ' . $model->event->title,
+                                    'data' => ['event_id' => $model->id]
+                                ]);
+
+
                             } catch (\Exception $e) {
                                 Log::error('Failed to send registration email: ' . $e->getMessage());
                             }
