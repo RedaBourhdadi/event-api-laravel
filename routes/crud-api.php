@@ -11,6 +11,12 @@ Route::middleware('auth:api')->group(function () {
     Route::controller(EventController::class)->group(function () {
         Route::post('/events/create', 'createOne');
         Route::delete('/events/{id}', 'deleteOne');
+        Route::get('/events/{id}', 'readOne');
+        Route::put('/events/{id}', 'updateOne');
+        Route::get('/events', 'readAll');
+
+
+
     
     });
 
@@ -20,6 +26,7 @@ Route::middleware('auth:api')->group(function () {
             Route::get('/Attendee/{id}', 'readOne');
             Route::get('/Attendee', 'readAll');
             Route::delete('/Attendee/{id}', 'deleteOne');
+
         }
     );
 
@@ -38,7 +45,6 @@ Route::middleware('auth:api')->group(function () {
 
 Route::controller(EventController::class)->group(function () {
     Route::get('/', 'readAllEvents');
-    Route::get('/events', 'readAll');
 
 });
 
