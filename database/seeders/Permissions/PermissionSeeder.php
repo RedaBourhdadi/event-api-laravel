@@ -35,7 +35,7 @@ class PermissionSeeder extends Seeder
         $this->aclService->assignScopePermissionsToRole($adminRole, 'users', ['create', 'read', 'update', 'delete']);
         $this->aclService->assignScopePermissionsToRole($userRole, 'events', ['create', 'read']);
         $this->aclService->assignScopePermissionsToRole($adminRole, 'events', ['create', 'read', 'update', 'delete']);
-        $this->aclService->assignScopePermissionsToRole($userRole, 'event_attendees', ['create', 'read','delete']);
+        $this->aclService->assignScopePermissionsToRole($userRole, 'event_attendees', ['create']);
         $this->aclService->assignScopePermissionsToRole($adminRole, 'event_attendees', ['create', 'read', 'update', 'delete']);
     }
 

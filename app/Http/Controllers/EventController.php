@@ -41,6 +41,9 @@ class EventController extends CrudController
     //     }
     // }
 
+
+
+    
     public function readAll(Request $request)
     {
         try {
