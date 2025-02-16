@@ -158,16 +158,26 @@ class EventController extends CrudController
                     if (method_exists($this, 'beforeDeleteOne')) {
                         $this->beforeDeleteOne($model, $request);
                     }
-                    $attendees = EventAttendee::where('event_id', $id)->get();
-                    foreach ($attendees as $attendee) {
-                        Mail::send('vendor.mail.html.event-deleted', [
-                            'eventTitle' => $model->title,
-                            'eventDate' => $model->date,
-                            'eventLocation' => $model->location,
-                        ], function ($message) use ($attendee) {
-                            $message->to($attendee->user->email)
-                                   ->subject('Event Cancelled');
-                        });
+
+                    try {
+                        $attendees = EventAttendee::where('event_id', $id)->get();
+                        foreach ($attendees as $attendee) {
+                            Mail::send('vendor.mail.html.event-deleted', [
+                                'eventTitle' => $model->title,
+                                'eventDate' => $model->date,
+                                'eventLocation' => $model->location,
+                            ], function ($message) use ($attendee) {
+                                $message->to($attendee->user->email)
+                                       ->subject('Event Cancelled');
+                            });
+                        }
+                    } catch (\Exception $e) {  
+                        Log::error('Error sending event deletion emails: ' . $e->getMessage());
+                        return response()->json([
+                            'success' => false, 
+                            'errors' => ['Failed to send notification emails'],
+                            'message' => __('common.unexpected_error')
+                        ]);
                     }
 
                     $model->delete();
@@ -250,7 +260,7 @@ class EventController extends CrudController
                     if (!empty($changes)) {
 
                         $attendees = EventAttendee::where('event_id', $id)->get();
-
+                        try{
                         foreach ($attendees as $attendee) {
                             Mail::send('vendor.mail.html.event-updated', [
                                 'eventTitle' => $model->title,
@@ -269,6 +279,16 @@ class EventController extends CrudController
                                 'data' => ['event_id' => $model->id]
                             ]);
                         }
+                        }catch (\Exception $e) {  
+                        Log::error('Error sending event deletion emails: ' . $e->getMessage());
+                        return response()->json([
+                            'success' => false, 
+                            'errors' => ['Failed to send notification emails'],
+                            'message' => __('common.unexpected_error')
+                        ]);
+                        }
+
+                        
                     }
 
                     if (method_exists($this, 'afterUpdateOne')) {

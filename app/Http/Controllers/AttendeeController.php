@@ -66,17 +66,17 @@ class AttendeeController extends CrudController
                                            ->subject('Event Registration Confirmed');
                                 });
 
-                                Notification::create([
-                                    'user_id' => $request->user()->id,
-                                    'title' => 'New Event Participant',
-                                    'message' => $name . ' has joined your event: ' . $model->event->title,
-                                    'data' => ['event_id' => $model->id]
-                                ]);
 
 
                             } catch (\Exception $e) {
                                 Log::error('Failed to send registration email: ' . $e->getMessage());
                             }
+                            Notification::create([
+                                'user_id' => $request->user()->id,
+                                'title' => 'New Event Participant',
+                                'message' => $name . ' has joined your event: ' . $model->event->title,
+                                'data' => ['event_id' => $model->id]
+                            ]);
         
                             return response()->json(
                                 [
