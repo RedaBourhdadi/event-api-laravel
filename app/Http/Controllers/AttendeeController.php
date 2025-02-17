@@ -72,7 +72,7 @@ class AttendeeController extends CrudController
                                 Log::error('Failed to send registration email: ' . $e->getMessage());
                             }
                             Notification::create([
-                                'user_id' => $request->user()->id,
+                                'user_id' => $model->event->user_id,
                                 'title' => 'New Event Participant',
                                 'message' => $name . ' has joined your event: ' . $model->event->title,
                                 'data' => ['event_id' => $model->id]
